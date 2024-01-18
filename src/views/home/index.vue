@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 
+
+const value1 = ref(new Date())
 
 </script>
 
@@ -10,6 +13,12 @@
     </h2>
     <div>
       <el-button type="primary">Primary</el-button>
+      <el-date-picker
+          v-model="value1"
+          type="week"
+          format="[Week] ww"
+          placeholder="Pick a week"
+        />
     </div>
   </div>
 </template>
