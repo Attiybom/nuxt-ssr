@@ -1,18 +1,78 @@
-# Vue 3 + TypeScript + Vite
+## 国际化
+### 方案
+组件的语言切换：element-plus
+文本类的语言切换：vue-i18n
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+#### element-plus
+* 变量locale设置语言环境
+```js
+import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
+import en from 'element-plus/dist/locale/en.mjs'
 
-## Recommended IDE Setup
+// 定义语言包
+const locale = ref(en)
+```
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+* 用<el-config-provider>包裹组件
 
-## Type Support For `.vue` Imports in TS
+```js
+  <el-config-provider :locale="locale">
+    <app />
+  </el-config-provider>
+```
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+#### vue-i18n
+1. 拆分
+* 主
+```ts
+// language/i18n.ts
+import { createI18n } from 'vue-i18n'
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+const i18n = createI18n({
+  legacy: false, // 不添加这个有可能会报模式错误
+  locale: 'zh',
+  messages: {
+    zh, // 专门用来存放中文相关文案
+    en // 专门用来存放中文相关文案
+  }
+})
 
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+export default i18n
+```
+
+2. 挂载
+```ts
+import { createApp } from 'vue'
+...
+
+// 国际化
+import i18n from './language/i18n'
+
+const app = createApp(App)
+
+app.use(i18n) //挂载
+
+app.mount('#app')
+```
+
+3. 使用
+```js
+import { useI18n } from 'vue-i18n'
+
+// t 使用在模板字符串上， locale用于切换语言
+const { t, locale:localeLanguage } = useI18n()
+
+function changeLang(lang: string) {
+  if (lang === 'en') {
+    locale.value = en // 切换element-plus的组件语言
+    localeLanguage.value = 'en' // 切换文本语言
+  } else {
+    locale.value = zhCn
+    localeLanguage.value = 'zh'
+  }
+}
+
+```
+```html
+<span>{{ t('message.home') }}</span>
+```
