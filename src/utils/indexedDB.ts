@@ -75,18 +75,18 @@ export default class DB {
   public updateItem(storeName: string, data: any) {
     console.log('添加/修改数据')
     const store = this.db.transaction([storeName], 'readwrite').objectStore(storeName)
+    // 添加数据 - 不需要传入主键，可以直接使用add方法
+    // 这里是为了兼容修改数据,因此使用put方法
+    // 修改数据需要外界传入主键
+    const request = store.put({
+      ...data,
+      // 时间戳
+      timestamp: Date.now(),
+    })
 
     // promise封装
     return new Promise((resolve, reject) => {
 
-      // 添加数据 - 不需要传入主键，可以直接使用add方法
-      // 这里是为了兼容修改数据,因此使用put方法
-      // 修改数据需要外界传入主键
-      const request = store.put({
-        ...data,
-        // 时间戳
-        timestamp: Date.now(),
-      })
 
       // 请求成功的回调
       request.onsuccess = (event: any) => {
@@ -113,10 +113,10 @@ export default class DB {
     console.log('删除数据')
     const store = this.db.transaction([storeName], 'readwrite').objectStore(storeName)
 
+    const request = store.delete(key)
     // promise封装
     return new Promise((resolve, reject) => {
       // 删除数据
-      const request = store.delete(key)
 
       // 请求成功的回调
       request.onsuccess = (event: any) => {
@@ -141,11 +141,11 @@ export default class DB {
   public getItem(storeName: string, key: number | string) {
     console.log('查询数据')
     const store = this.db.transaction(storeName).objectStore(storeName)
+    // 查询数据
+    const request = store.get(key)
 
     // promise封装
     return new Promise((resolve, reject) => {
-      // 查询数据
-      const request = store.get(key)
 
       // 请求成功的回调
       request.onsuccess = (event: any) => {
