@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+// 引入indexDB
+import IndexedDB from '@/utils/indexedDB'
 
+// 创建数据库
+const airbnbDB = new IndexedDB('airbnbDB')
+airbnbDB.openStore('elephant', 'id' ,['nose', 'ear'])
 
 const value1 = ref(new Date())
 
