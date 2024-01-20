@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import HomeCommon from './layout/HomeCommon.vue'
+import { ref, onBeforeMount } from 'vue';
 import { RouterLink, useRouter } from 'vue-router'
 
+// api
+import { getLanguageReq } from '@/api/layout'
 
 // 引入语言包
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 import en from 'element-plus/dist/locale/en.mjs'
-
-
 
 // 定义语言包
 const locale = ref(en)
@@ -15,8 +16,23 @@ const locale = ref(en)
 // 引入i18n
 import { useI18n } from 'vue-i18n'
 
-const { t, locale:localeLanguage } = useI18n()
+const { locale: localeLanguage } = useI18n()
 
+// 初始化语言
+onBeforeMount(() => {
+  getLanguage()
+})
+
+function getLanguage() {
+  getLanguageReq().then(res => {
+    if (res.code === 200) {
+      console.log('获取语言成功')
+      changeLang(res.data.name)
+    } else {
+      console.log('获取语言失败')
+    }
+  })
+}
 
 // 切换语言
 function changeLang(lang: string) {
@@ -29,48 +45,34 @@ function changeLang(lang: string) {
   }
 }
 
-// 跳转首页
-const router = useRouter()
-function toHome() {
-  router.push({
-    path: '/'
-  })
-}
+// // 跳转首页
+// const router = useRouter()
+// function toHome() {
+//   router.push({
+//     path: '/'
+//   })
+// }
 
 
 </script>
 
 <template>
   <el-config-provider :locale="locale">
-    <div>
-      <!-- 首页和登录页跳转 -->
+    <HomeCommon @changeLang="changeLang" />
+    <router-view></router-view>
+    <!-- <div>
       <button @click="toHome">home</button>
       <RouterLink to="login">login</RouterLink>
       <RouterView></RouterView>
-    </div>
-    <div>
+    </div> -->
+    <!-- <div>
       <span>{{ t('message.home') }}</span>
 
-      <!-- 切换语言 -->
       <el-button type="success" @click="changeLang('cn')">中文</el-button>
       <el-button type="success" @click="changeLang('en')">英文</el-button>
-    </div>
+    </div> -->
   </el-config-provider>
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
 </style>
