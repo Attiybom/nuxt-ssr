@@ -26,6 +26,64 @@ const locale = ref(en)
 ```
 
 #### vue-i18n
+* 拆分语言包
+```ts
+// language文件下
+// i18n.ts 主入口文件
+import { createI18n } from 'vue-i18n'
+import zh from './zh'
+import en from './en'
+
+const i18n = createI18n({
+  legacy: false,
+  locale: 'zh',
+  messages: {
+    zh,
+    en
+  }
+})
+
+export default i18n
+
+// zh.ts 中文语料包
+export default {
+  header: { // 头部组件
+    records: '历史足迹',
+  }
+}
+
+// en.ts 英文语料包
+export default {
+  header: { // 头部组件
+    records: 'The historical footprints',
+  }
+}
+```
+
+* 挂载
+```ts
+// main.ts
+
+// 国际化
+import i18n from './language/i18n'
+app.use(i18n)
+
+```
+* 使用
+
+```ts
+// HeaderCommon.vue
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
+```
+```html
+<div class="home-common">
+<!-- //  中文环境下, 这里会显示“历史足迹” -->
+<!-- //  英文环境下，这里会显示“The historical footprints” -->
+  <el-menu-item index="records">{{ t('header.records') }}</el-menu-item>
+</div>
+```
+
 
 1. 拆分
 

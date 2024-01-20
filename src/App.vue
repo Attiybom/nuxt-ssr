@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import HomeCommon from './layout/HomeCommon.vue'
+import HeaderCommon from './layout/HeaderCommon.vue'
+import FooterCommon from './layout/FooterCommon.vue'
+
 import { ref, onBeforeMount } from 'vue';
 import { RouterLink, useRouter } from 'vue-router'
 
@@ -58,8 +60,11 @@ function changeLang(lang: string) {
 
 <template>
   <el-config-provider :locale="locale">
-    <HomeCommon @changeLang="changeLang" />
-    <router-view></router-view>
+    <HeaderCommon @changeLang="changeLang" />
+    <div class="main-container">
+      <router-view></router-view>
+    </div>
+    <FooterCommon />
     <!-- <div>
       <button @click="toHome">home</button>
       <RouterLink to="login">login</RouterLink>
@@ -75,4 +80,7 @@ function changeLang(lang: string) {
 </template>
 
 <style scoped>
+.main-container {
+  min-height: calc(100vh - 352px);
+}
 </style>

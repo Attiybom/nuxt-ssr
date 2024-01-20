@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import { useI18n } from 'vue-i18n'
+// import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n()
+// const { t } = useI18n()
 
 // 引入indexDB
 // import IndexedDB from '@/utils/indexedDB'
@@ -54,7 +54,7 @@ const value1 = ref(new Date())
 <template>
   <div class="home">
     <div>
-      <span>{{ t('message.home') }}</span>
+      <!-- <span>{{ t('message.home') }}</span> -->
       <!-- <el-button type="primary" @click="changeDB('elephant')">测试数据</el-button>
       <el-button type="primary" @click="deleteDBdata('elephant', 1)">删除数据</el-button>
       <el-button type="primary" @click="getDBdata('elephant', 1)">查询单个数据</el-button>
