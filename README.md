@@ -26,6 +26,64 @@ const locale = ref(en)
 ```
 
 #### vue-i18n
+* 拆分语言包
+```ts
+// language文件下
+// i18n.ts 主入口文件
+import { createI18n } from 'vue-i18n'
+import zh from './zh'
+import en from './en'
+
+const i18n = createI18n({
+  legacy: false,
+  locale: 'zh',
+  messages: {
+    zh,
+    en
+  }
+})
+
+export default i18n
+
+// zh.ts 中文语料包
+export default {
+  header: { // 头部组件
+    records: '历史足迹',
+  }
+}
+
+// en.ts 英文语料包
+export default {
+  header: { // 头部组件
+    records: 'The historical footprints',
+  }
+}
+```
+
+* 挂载
+```ts
+// main.ts
+
+// 国际化
+import i18n from './language/i18n'
+app.use(i18n)
+
+```
+* 使用
+
+```ts
+// HeaderCommon.vue
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
+```
+```html
+<div class="home-common">
+<!-- //  中文环境下, 这里会显示“历史足迹” -->
+<!-- //  英文环境下，这里会显示“The historical footprints” -->
+  <el-menu-item index="records">{{ t('header.records') }}</el-menu-item>
+</div>
+```
+
 
 1. 拆分
 
@@ -224,3 +282,64 @@ export default class DB {
 
 
 ```
+
+
+## CSR AND SSR
+### 传统SSR
+* 例子：爱彼迎
+* 服务端渲染
+```
+传统服务端渲染有JSP、ESP、ASP等，通过模板引擎将数据和dom在服务端完成渲染，返回完整html给客户端
+客户端只负责显示
+```
+
+* 原理
+1.  客户端发起http请求
+2.  服务端响应请求，将拼接好的html字符串发送给客户端
+3.  客户端渲染html
+
+* 缺点
+1.  前后端不分离，耦合度过高，不好维护
+2.  客户体验不佳，刷新数据可能需要重新加载页面
+3.  服务端压力大
+
+
+### CSR
+* 例子：飞书
+* 客户端渲染
+```
+服务端返回空html
+客户端通过js进行页面的渲染和路由跳转等操作
+页面数据通过ajax请求从服务端获取，
+在客户端进行页面的拼接和渲染
+
+```
+* 原理
+1.  客户端发起请求
+2.  服务端响应请求，返回空html
+3.  客户端初始化时加载必须的js脚本，请求接口
+4.  将生成的dom插入到之前的空html中
+* 缺点
+1.  首屏加载慢
+2.  不利于SEO （源码中压根就没有自己的内容，也就不会被爬到关键字，自然不利于SEO）
+
+
+### 同构
+* 例子：美团
+* 服务端渲染 + 客户端渲染
+
+* 原理
+1.  客户端发起请求
+2.  服务端响应请求，将vue实例转化为静态html字符串发送给客户端
+3.  客户端渲染静态html，而对于一些操作则需要客户端自行处理
+
+
+* 缺点
+1.  服务端压力大
+2.  一些第三方库可能需要特殊处理
+3.  涉及构建设置和部署的更多要求（有一些生命周期只有在服务端有，客户端没有，而第三方库有些是没有考虑到这点）
+
+* 优点
+1.  首屏加载速度快
+2.  前后端分离，易于维护
+3.  有利于SEO

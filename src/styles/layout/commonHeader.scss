@@ -1,0 +1,30 @@
+.home-common {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 80px;
+  position: relative;
+  align-items: center;
+
+  .logo {
+    width: 200px;
+    height: auto;
+    // position: absolute;
+    // top: 17px;
+    // left: 15px;
+    // z-index: 10;
+    cursor: pointer;
+  }
+
+  .el-menu-container {
+    width: inherit;
+    padding: 0 25px;
+    justify-content: right;
+  }
+
+  .avatar {
+    border-radius: 50%;
+    // // 头像阴影
+    // box-shadow: rgba($color: #000000, $alpha: 1.0);
+  }
+}

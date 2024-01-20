@@ -1,0 +1,40 @@
+.footer-common {
+  @include main-wapper;
+  border-top: 1px solid #ccc;
+
+  .inner-footer {
+
+    .link-container {
+      // display: flex;
+      // justify-content: space-around;
+      @include flex-layout(row, space-around, flex-start);
+
+      .a-container {
+        // display: flex;
+        // flex-direction: column;
+        @include flex-layout(column);
+
+        a {
+          color: #999;
+          text-decoration: none;
+          font-size: 14px;
+          margin-top: 2px;
+
+          &:hover {
+            // color: #999;
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+
+    .copy-right {
+      @include main-wapper;
+      text-align: center;
+      color: #999;
+      font-size: 14px;
+      border-top: 1px solid #ccc;
+      padding-top: 30px;
+    }
+  }
+}
