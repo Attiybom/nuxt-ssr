@@ -34,8 +34,12 @@ export default {
     signBtn: '立即注册',
     loginTab: '登录',
     signTab: '注册',
-    placeMobile: '请输入正确的手机号',
+    username: '用户名',
+    password: '密码',
+    placeMobile: '请输入正确的用户名',
     placePass: '请输入正确的密码',
+    errorMobile: '用户名长度在6-30个字符之间',
+    errorPass: '密码长度在6-30个字符之间',
     logout: '退出',
     loginLost: '您还未登录，请先登录哦~'
   },

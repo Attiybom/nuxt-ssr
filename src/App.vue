@@ -47,12 +47,20 @@ function changeLang(lang: string) {
   }
 }
 
-// // 跳转首页
-// const router = useRouter()
-// function toHome() {
-//   router.push({
-//     path: '/'
-//   })
+// 根据路由path判断是否显示footer和header
+const route = useRouter()
+
+// function handleClick() {
+//   console.log('route', route)
+//   // 输出当前路径
+//   console.log('route.path', route.currentRoute.value.name)
+//   // if (path.value === '/login') {
+//   //   router.push('/')
+//   //   path.value = '/'
+//   // } else {
+//   //   router.push('/login')
+//   //   path.value = '/login'
+//   // }
 // }
 
 
@@ -60,11 +68,12 @@ function changeLang(lang: string) {
 
 <template>
   <el-config-provider :locale="locale">
-    <HeaderCommon @changeLang="changeLang" />
+    <HeaderCommon @changeLang="changeLang" v-show="route.currentRoute.value.name !== 'login'" />
     <div class="main-container">
+      <!-- <button @click="handleClick">click</button> -->
       <router-view></router-view>
     </div>
-    <FooterCommon />
+    <FooterCommon  v-show="route.currentRoute.value.name !== 'login'"  />
     <!-- <div>
       <button @click="toHome">home</button>
       <RouterLink to="login">login</RouterLink>
