@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
+// 引入路由
+import { useRouter } from 'vue-router';
+const router = useRouter();
+
 // api
 import { saveLanguageReq } from "@/api/layout";
 
@@ -23,10 +27,12 @@ function handleSelect(key: string, keyPath: string) {
     console.log('en')
     emits('changeLang', key)
     saveLanguageReq(key)
-  } else {
+  } else if (key === 'zh') {
     console.log('zh')
     emits('changeLang', key)
     saveLanguageReq(key)
+  } else if (key === 'login') {
+    router.push({ path: '/login' })
   }
 }
 
@@ -47,8 +53,11 @@ function handleSelect(key: string, keyPath: string) {
         <el-menu-item index="zh">{{ t('header.zh') }}</el-menu-item>
         <el-menu-item index="en">{{ t('header.en') }}</el-menu-item>
       </el-sub-menu>
-      <el-menu-item index="me">
+      <el-menu-item index="avatar">
         <img src="../assets/images/layout/avatar.jpg" alt="个人中心" class="avatar">
+      </el-menu-item>
+      <el-menu-item index="login">
+        {{ t('login.loginTab')  }} / {{  t('login.signTab') }}
       </el-menu-item>
     </el-menu>
   </div>
