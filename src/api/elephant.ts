@@ -1,7 +1,6 @@
 // import { request } from '@/utils/request';
-import IndexedDB from '@/utils/indexedDB';
 
-const airbnbDB = new IndexedDB('airbnbDB');
+import { airbnbDB } from '../db/index'
 
 const dbName = 'elephant';
 const storeName = 'elephant';
